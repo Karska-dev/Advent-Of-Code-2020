@@ -1,20 +1,4 @@
 
-function parseInput(input) {
-  let result = input.split(`\n`);
-  result.forEach((element, i) => {
-    let range, letter, pass;
-    [range, letter, pass] = element.split(' ');
-    range = range.split('-');
-    letter = letter[0];
-    result[i] = {
-      range: range,
-      letter: letter,
-      pass: pass
-    }
-  });
-  return result;
-}
-
 var input = `8-11 l: qllllqllklhlvtl
 1-3 m: wmmmmmttm
 2-4 p: pgppp
@@ -1016,4 +1000,66 @@ var input = `8-11 l: qllllqllklhlvtl
 5-9 h: lbhdhplmbnwh
 5-6 d: jdddqqt`;
 
-console.log(parseInput(input));
+function parseInput(input) {
+  let result = input.split(`\n`);
+  result.forEach((element, i) => {
+    let range, letter, pass;
+    [range, letter, pass] = element.split(' ');
+    range = range.split('-').map(el => parseInt(el));
+    letter = letter[0];
+    result[i] = {
+      range: range,
+      letter: letter,
+      pass: pass
+    }
+  });
+  return result;
+}
+
+function checkPass1(obj) {
+  let arr = obj.pass.split('');
+
+  let letterCount = arr.reduce(
+    ((count, char) => {
+      return char === obj.letter ? count + 1 : count
+    }),
+    0
+  );
+
+  if (obj.range[0] <= letterCount && letterCount <= obj.range[1]) return true;
+  return false;
+}
+
+function myXOR(a, b) {
+  return (a || b) && !(a && b);
+}
+
+function checkPass2(obj) {
+let letter = obj.letter;
+let first = obj.range[0] - 1;
+let second = obj.range[1] - 1;
+let pass = obj.pass;
+
+  // Unfortunately, JavaScript does not have a logical XOR operator.
+  if ( myXOR( pass[first] === letter, pass[second] === letter) ) return true;
+
+  return false;
+}
+
+function countValidPasswords(input) {
+  let count = 0;
+
+  const passDB = parseInput(input);
+  //console.table(passDB);
+  count = passDB.reduce(
+    (count, obj) => {
+      return checkPass2(obj) ? count + 1 : count;
+    },
+    count
+  );
+
+  return count;
+}
+
+console.log(countValidPasswords(input)); //416 - for checkPass1, 688 - for checkPass2
+
