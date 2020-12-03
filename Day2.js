@@ -1000,6 +1000,7 @@ var input = `8-11 l: qllllqllklhlvtl
 5-9 h: lbhdhplmbnwh
 5-6 d: jdddqqt`;
 
+// let input data looks better as a array of objects
 function parseInput(input) {
   let result = input.split(`\n`);
   result.forEach((element, i) => {
@@ -1015,7 +1016,10 @@ function parseInput(input) {
   });
   return result;
 }
+// to see input as a cute table you can with:
+// console.table(parseInput(input));
 
+// password validation for the first part
 function checkPass1(obj) {
   let arr = obj.pass.split('');
 
@@ -1030,10 +1034,12 @@ function checkPass1(obj) {
   return false;
 }
 
+// helper logical xor for the second part
 function myXOR(a, b) {
   return (a || b) && !(a && b);
 }
 
+// password validator for the second part
 function checkPass2(obj) {
 let letter = obj.letter;
 let first = obj.range[0] - 1;
@@ -1046,6 +1052,7 @@ let pass = obj.pass;
   return false;
 }
 
+// main function to solve the task
 function countValidPasswords(input) {
   let count = 0;
 
@@ -1062,4 +1069,3 @@ function countValidPasswords(input) {
 }
 
 console.log(countValidPasswords(input)); //416 - for checkPass1, 688 - for checkPass2
-
